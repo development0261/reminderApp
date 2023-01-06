@@ -80,21 +80,23 @@
                   <input type="checkbox">
                   <span class="date-time-switch-slider" />
                 </label>
-                <b-button v-b-toggle.collapse-1 class="date-time-btn">
+                <b-button class="date-time-btn" v-b-toggle.collapse-1>
                   <span class="date-time-icon date-icon">
                     <img src="../static/images/calendar.svg">
                   </span>
                   <div class="date-time-text">
                     <h6>Date</h6>
                     <p>
-                      <client-only> <vue-datepicker class="datePicker" reference="menu" v-model="date_today" :config="{collapse:true}" @click="openDatepicker" /> </client-only>
+                      {{ selectedDate }}
                     </p>
                   </div>
                 </b-button>
               </div>
               <b-collapse id="collapse-1">
                 <div class="date-time-details">
-                  <!-- <client-only> <vue-datepicker class="fileInput" reference="menu" v-model="date_today" :config="{collapse:true}" /> </client-only> -->
+                  <client-only>
+                    <vue-datepicker v-model="date_today" :inline="true" @selected="datePickerEvent" />
+                  </client-only>
                 </div>
               </b-collapse>
             </li>
@@ -110,14 +112,17 @@
                   </span>
                   <div class="date-time-text">
                     <h6>Time</h6>
+                    <p>
+                      Current
+                    </p>
                     <!-- <p>14:00</p> -->
-                    <client-only> <vue-datepicker class="timePicker" reference="menu" v-model="time_today" :config="{collapse:true}" /> </client-only>
+                    <!-- <client-only> <vue-datepicker class="timePicker" reference="menu" v-model="time_today" :config="{collapse:true}" /> </client-only> -->
                   </div>
                 </b-button>
               </div>
               <b-collapse id="collapse-2">
                 <div class="date-time-details1">
-                  <h2>test</h2>
+                  <vue-timepicker v-model="yourTimeValue" format="HH:mm:ss" />
                 </div>
               </b-collapse>
             </li>
@@ -138,6 +143,7 @@ export default {
       askDelete: false,
       openpicker: false,
       date_today: new Date(),
+      selectedDate: '',
       time_today: new Date(),
       title: '',
       description: '',
@@ -148,7 +154,12 @@ export default {
       enableSubmit: false,
       isError: false,
       slideDelete: false,
-      fileIndex: ''
+      fileIndex: '',
+      yourTimeValue: {
+        HH: '10',
+        mm: '05',
+        ss: '00'
+      }
     }
   },
   watch: {
@@ -163,7 +174,19 @@ export default {
       }
     }
   },
+  mounted () {
+    this.selDel()
+  },
   methods: {
+    selDel () {
+      const dt = new Date(this.date_today)
+      this.selectedDate = dt.getDate() + '/' + dt.getMonth() + 1 + '/' + dt.getFullYear()
+    },
+    datePickerEvent (event) {
+      this.date_today = event
+      const dt = new Date(this.date_today)
+      this.selectedDate = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear()
+    },
     hideModal () {
       this.$emit('close')
     },
@@ -175,10 +198,11 @@ export default {
       }
     },
     async formSubmit () {
+      const dateStr = this.date_today
       const data = new FormData()
       data.append('title', this.title)
       data.append('description', this.description)
-      data.append('due_date', this.date_today)
+      data.append('due_date', new Date(dateStr).toISOString())
       data.append('due_time', this.due_time)
       for (let i = 0; i < this.attachment.length; i++) {
         data.append('attachment[' + i + ']', this.$refs.file1.files[i])
@@ -210,27 +234,6 @@ export default {
     openDelete (index) {
       this.slideDelete = !this.slideDelete
       this.fileIndex = index
-    },
-    openDatepicker () {
-      this.openpicker = !this.openpicker
-      if (this.openpicker) {
-        // document.getElementsByClassName('datePicker')[0].focus()
-        document.getElementsByClassName('bootstrap-datetimepicker-widget')[0].remove()
-      }
-      // setTimeout(() => {
-      //   const elementExists = document.getElementsByClassName('bootstrap-datetimepicker-widget')[0]
-      //   console.log(typeof (elementExists), elementExists)
-      //   // && elementExists != null
-      //   if (typeof (elementExists) === 'undefined') {
-      //     console.log('Hi')
-      //   } else {
-      //     document.getElementsByClassName('fileInput')[0].focus()
-      //     console.log('bye')
-      //   }
-      //   // if (fileUpload != null) {
-      //   //   fileUpload.click()
-      //   // }
-      // }, 500)
     }
   }
 }
