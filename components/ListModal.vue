@@ -13,16 +13,17 @@
         List Back
       </button>
     </div>
-    <div class="reminder-slides" :class="{ 'change-slide': changeslide }">
-      <div class="new-reminder-slide">
+    <div class="reminder-slides reminders-main-slide" :class="{ 'change-slide': changeslide }">
+      <div class="new-reminder-slide ">
+        <h4 class="reminders-main-title">Reminders</h4>
         <div class="list-view">
           <ul>
             <li v-for="(list, index) in data" :key="index" @click="openModal(list)">
               <h6>{{ list.title }}</h6>
               <p>{{ list.description }}</p>
-              <p>{{ list.due_date }}, {{ list.due_time }}</p>
-              <div class="add-image-list">
-                <div v-for="(file, fileIndex) in JSON.parse(list.attachment)" :key="fileIndex" class="upload-image-box">
+              <p class="due-date-time">{{ list.due_date }}, {{ list.due_time }}</p>
+              <div class="uploded-image-list">
+                <div v-for="(file, fileIndex) in JSON.parse(list.attachment)" :key="fileIndex" class="uploded-image-box">
                   <img :src="url + '/' + file">
                 </div>
               </div>
@@ -31,12 +32,12 @@
         </div>
       </div>
       <div v-if="modalVisible" class="details-slide">
-        <h6>{{ modalData.title }}</h6>
-        <p>{{ modalData.description }}</p>
-        <p>{{ modalData.due_date + modalData.due_time }}</p>
-        <p>
-          <img v-for="(file, index) in JSON.parse(modalData.attachment)" :key="index" :src="url + '/' + file" style="height: 130px;width: 25%;margin-left: 10px;">&nbsp;
-        </p>
+        <h6 class="reminder-detail-title">{{ modalData.title }}</h6>
+        <p class="reminder-detail-text">{{ modalData.description }}</p>
+        <p  class="due-date-time">{{ modalData.due_date + modalData.due_time }}</p>
+        <div class="reminder-detail-images">
+          <img v-for="(file, index) in JSON.parse(modalData.attachment)" :key="index" :src="url + '/' + file">&nbsp;
+        </div>
       </div>
     </div>
   </div>
