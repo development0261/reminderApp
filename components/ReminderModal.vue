@@ -55,16 +55,15 @@
           </b-dropdown>
           <div class="add-image-list">
             <ul>
-              <li v-for="(file, index) in url" :key="index">
-                <!-- ask-delete -->
+              <li v-for="(file, index) in filesdata" :key="index" :class="{ 'ask-delete': askDelete }" @click="askDelete = !askDelete">
                 <div class="upload-image-box">
-                  <span>
+                  <span @click="askDelete = !askDelete">
                     <img src="../static/images/minus-circle.svg">
                   </span>
                   <img :src="file">
                   <h6>Image</h6>
                 </div>
-                <button class="delete-upload">
+                <button class="delete-upload" @click="deleteEvent(index)">
                   Delete
                 </button>
               </li>
@@ -136,6 +135,7 @@ export default {
   data () {
     return {
       changeslide: false,
+      askDelete: false,
       openpicker: false,
       date_today: new Date(),
       time_today: new Date(),
@@ -143,7 +143,8 @@ export default {
       description: '',
       due_time: new Date(),
       attachment: null,
-      url: []
+      url: [],
+      filesdata: []
     }
   },
   methods: {
@@ -153,8 +154,8 @@ export default {
     handleFileUpload () {
       this.attachment = this.$refs.file1.files
       for (let i = 0; i < this.attachment.length; i++) {
-        this.url[i] = URL.createObjectURL(this.attachment[i])
-        // this.$store.commit('addFiles', URL.createObjectURL(this.attachment[i]))
+        this.url = URL.createObjectURL(this.attachment[i])
+        this.filesdata.push(this.url)
       }
     },
     async formSubmit () {
@@ -186,6 +187,9 @@ export default {
       }).catch((err) => {
         alert(err)
       })
+    },
+    deleteEvent (event) {
+      this.filesdata.splice(event, 1)
     },
     openDatepicker () {
       this.openpicker = !this.openpicker

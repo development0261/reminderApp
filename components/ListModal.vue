@@ -20,6 +20,12 @@
             <li v-for="(list, index) in results" :key="index" @click="openModal(list)">
               <h6>{{ list.title }}</h6>
               <p>{{ list.description }}</p>
+              <p>{{ list.due_date }}, {{ list.due_time }}</p>
+              <div class="add-image-list">
+                <div v-for="(file, fileIndex) in JSON.parse(list.attachment)" :key="fileIndex" class="upload-image-box">
+                  <img :src="url + '/' + file">
+                </div>
+              </div>
             </li>
           </ul>
         </div>
