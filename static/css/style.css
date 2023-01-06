@@ -703,3 +703,8 @@ textarea:focus {
     font-size: 14px;
     color: #999999;
 }
+
+.titleError {
+    color : red;
+    font-size: 13px;
+}

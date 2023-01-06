@@ -17,7 +17,7 @@
       <div class="new-reminder-slide">
         <div class="list-view">
           <ul>
-            <li v-for="(list, index) in results" :key="index" @click="openModal(list)">
+            <li v-for="(list, index) in data" :key="index" @click="openModal(list)">
               <h6>{{ list.title }}</h6>
               <p>{{ list.description }}</p>
               <p>{{ list.due_date }}, {{ list.due_time }}</p>
@@ -42,11 +42,14 @@
   </div>
 </template>
 <script>
-// import ReminderDetails from './ReminderDetails'
+
 export default {
   name: 'ListModal',
-  components: {
-    // ReminderDetails
+  props: {
+    data: {
+      type: Array,
+      default: () => []
+    }
   },
   data () {
     return {
@@ -57,9 +60,14 @@ export default {
       url: process.env.NUXT_ENV_ATTACHMENT_URL
     }
   },
-  async mounted () {
-    await this.$axios.get(process.env.NUXT_ENV_API_URL + '/reminders').then((response) => { this.results = response.data.data })
-  },
+  // async watch () {
+  //   console.log('Computed')
+  //   await this.getReminders()
+  // },
+  // async created () {
+  //   console.log('Mounted')
+  //   await this.getReminders()
+  // },
   methods: {
     hideModal () {
       this.$emit('close')
@@ -69,6 +77,9 @@ export default {
       this.modalVisible = true
       this.changeslide = !this.changeslide
     }
+    // async getReminders () {
+    //   await this.$axios.get(process.env.NUXT_ENV_API_URL + '/reminders').then((response) => { this.results = response.data.data })
+    // }
   }
 }
 </script>

@@ -5,7 +5,7 @@
     <div class="my-list">
       <ul>
         <li>
-          <a href="javascript:void(0)" @click="modalactive = !modalactive">
+          <a href="javascript:void(0)" @click="getReminders">
             <span class="list-icon icon-orange">
               <img src="../static/images/list.svg">
             </span>
@@ -17,7 +17,7 @@
       </ul>
     </div>
     <div class="new-list-modal" :class="{ 'modal-active': modalactive }">
-      <ListModal @close="modalactive = !modalactive" />
+      <ListModal @close="modalactive = !modalactive" :data="results"/>
     </div>
   </div>
 </template>
@@ -34,7 +34,14 @@ export default {
   },
   data () {
     return {
-      modalactive: false
+      modalactive: false,
+      results: []
+    }
+  },
+  methods: {
+    async getReminders () {
+      this.modalactive = !this.modalactive
+      await this.$axios.get(process.env.NUXT_ENV_API_URL + '/reminders').then((response) => { this.results = response.data.data })
     }
   }
 }

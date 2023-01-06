@@ -15,8 +15,7 @@
       <h4 class="details-title">
         Details
       </h4>
-      <button class="add-reminder" @click="formSubmit">
-        <!-- add-reminder-disable -->
+      <button class="add-reminder" :class=" (enableSubmit) ? '' : 'add-reminder-disable' " @click="formSubmit">
         Add
       </button>
     </div>
@@ -24,6 +23,7 @@
       <div class="new-reminder-slide">
         <div class="new-reminder-titles">
           <input v-model="title" type="text" placeholder="Title">
+          <span v-if="isError" class="titleError">Please fill this field.</span>
           <textarea v-model="description" rows="4" placeholder="Notes" />
         </div>
         <button class="reminder-details-btn" @click="changeslide = !changeslide">
@@ -41,23 +41,16 @@
             <b-dropdown-item-button>
               <label for="take-photo">
                 <input id="take-photo" ref="file2" type="file" @change="handleFileUpload($event)">
-                <p>Scan Document</p>
-                <img src="../static/images/scan.svg">
-              </label>
-            </b-dropdown-item-button>
-            <b-dropdown-item-button>
-              <label for="take-photo">
-                <input id="take-photo" ref="file3" type="file" @change="handleFileUpload($event)">
-                <p>Scan Document</p>
+                <p>Gallery</p>
                 <img src="../static/images/scan.svg">
               </label>
             </b-dropdown-item-button>
           </b-dropdown>
           <div class="add-image-list">
             <ul>
-              <li v-for="(file, index) in filesdata" :key="index" :class="{ 'ask-delete': askDelete }" @click="askDelete = !askDelete">
+              <li v-for="(file, index) in filesdata" :key="index" :class="(slideDelete && index == fileIndex) ? 'ask-delete' : ''" @click="openDelete(index)">
                 <div class="upload-image-box">
-                  <span @click="askDelete = !askDelete">
+                  <span>
                     <img src="../static/images/minus-circle.svg">
                   </span>
                   <img :src="file">
@@ -142,9 +135,25 @@ export default {
       title: '',
       description: '',
       due_time: new Date(),
-      attachment: null,
+      attachment: [],
       url: [],
-      filesdata: []
+      filesdata: [],
+      enableSubmit: false,
+      isError: false,
+      slideDelete: false,
+      fileIndex: ''
+    }
+  },
+  watch: {
+    title (value) {
+      this.title = value
+      if (value === '') {
+        this.enableSubmit = false
+        this.isError = true
+      } else {
+        this.enableSubmit = true
+        this.isError = false
+      }
     }
   },
   methods: {
@@ -190,6 +199,10 @@ export default {
     },
     deleteEvent (event) {
       this.filesdata.splice(event, 1)
+    },
+    openDelete (index) {
+      this.slideDelete = !this.slideDelete
+      this.fileIndex = index
     },
     openDatepicker () {
       this.openpicker = !this.openpicker
