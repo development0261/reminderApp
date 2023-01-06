@@ -149,7 +149,8 @@ input:focus {
     margin-right: 5px;
 }
 
-.new-reminder-modal, .new-list-modal {
+.new-reminder-modal,
+.new-list-modal {
     position: fixed;
     top: 0;
     right: 0;
@@ -175,11 +176,12 @@ input:focus {
     max-height: calc(100vh - 40px);
     max-width: 500px;
     margin: 0 auto;
-    overflow: scroll;
+    overflow: hidden;
     padding: 20px 15px;
 }
 
-.new-list-modal-box, .new-reminderdetails-modal-box {
+.new-list-modal-box,
+.new-reminderdetails-modal-box {
     background: #1C1C1E;
     min-height: calc(100vh - 40px);
     position: absolute;
@@ -192,22 +194,26 @@ input:focus {
     max-height: calc(100vh - 40px);
     max-width: 500px;
     margin: 0 auto;
-    overflow: scroll;
+    overflow: hidden;
     padding: 20px 15px;
 }
 
-.new-reminder-modal.modal-active, .new-list-modal.modal-active {
+.new-reminder-modal.modal-active,
+.new-list-modal.modal-active {
     opacity: 1;
     visibility: visible;
 }
 
-.modal-active .new-reminder-modal-box, .modal-active .new-list-modal-box, .modal-active .new-reminderdetails-modal-box {
+.modal-active .new-reminder-modal-box,
+.modal-active .new-list-modal-box,
+.modal-active .new-reminderdetails-modal-box {
     bottom: 0;
 }
 
 
 
 .reminder-header {
+    min-height: 21px;
     position: relative;
 }
 
@@ -243,18 +249,91 @@ input:focus {
     border: 0;
 }
 
+.due-date-time {
+    color: #D44C3E !important;
+}
+
+.uploded-image-list {
+    margin-top: 5px;
+    background: #2C2C2E;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.uploded-image-list>div {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.uploded-image-list img {
+    width: 100%;
+    height: 100%;
+}
+
+.uploded-image-list>div+div {
+    margin-left: 5px;
+}
+
+.reminders-main-title {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+}
+
+.reminders-main-slide .new-reminder-slide div.list-view {
+    max-height: calc(100vh - 110px);
+    overflow: scroll;
+}
+
+.reminders-main-slide {
+    max-height: initial !important;
+    overflow: hidden !important;
+}
+
+.reminders-main-slide .new-reminder-slide {
+    overflow: hidden;
+}
+
+.reminder-detail-text {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    color: #999999;
+}
+
+.reminder-detail-text {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    color: #999999;
+}
+
+.reminder-detail-images {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.reminder-detail-images img {
+    max-width: calc(33.33% - 14px);
+}
+
 .reminder-slides {
     display: flex;
-    min-height: calc(100vh - 120px);
-    padding: 20px 0 0 0;
-    overflow: hidden;
+    min-height: calc(100vh - 110px);
+    margin: 20px 0 0 0;
+    overflow-y: scroll;
+    align-items: flex-start;
+    max-height: calc(100vh - 110px);
 }
 
 .list-slides {
     display: flex;
-    min-height: calc(100vh - 120px);
-    padding: 20px 0 0 0;
-    overflow: hidden;
+    min-height: calc(100vh - 110px);
+    margin: 20px 0 0 0;
+    overflow-y: scroll;
+    max-height: calc(100vh - 110px);
 }
 
 .new-reminder-titles {
@@ -311,10 +390,13 @@ textarea:focus {
 
 .new-reminder-slide {
     flex: 0 0 100%;
+    max-height: calc(100vh - 110px);
+    overflow: scroll;
     transition: all 0.3s ease 0s;
 }
 
-.reminder-slides.change-slide .new-reminder-slide, .list-slides.change-slide .new-reminder-slide {
+.reminder-slides.change-slide .new-reminder-slide,
+.list-slides.change-slide .new-reminder-slide {
     margin-left: -100%;
     opacity: 0;
     visibility: hidden;
@@ -324,6 +406,8 @@ textarea:focus {
     transition: all 0.3s ease 0s;
     opacity: 0;
     visibility: hidden;
+    max-height: calc(100vh - 110px);
+    overflow: scroll;
 }
 
 .change-slide .details-slide {
@@ -610,7 +694,7 @@ textarea:focus {
     margin: 0 0 0 15px;
 }
 
-.add-image-list li+li .upload-image-box {
+.add-image-list li+li {
     border-top: 1px solid rgb(255 255 255 / 30%);
 }
 
@@ -623,6 +707,7 @@ textarea:focus {
     z-index: 2;
     transition: all 0.3s ease 0s;
     left: 0;
+    border-radius: 10px;
 }
 
 .delete-upload {
@@ -642,7 +727,7 @@ textarea:focus {
 }
 
 .ask-delete .upload-image-box {
-    left: -67px;
+    left: -68px;
 }
 
 .ask-delete .delete-upload {
@@ -683,8 +768,6 @@ textarea:focus {
 }
 
 .list-view {
-    min-height: calc(100vh - 111px);
-    overflow-y: scroll;
     width: 100%;
 }
 

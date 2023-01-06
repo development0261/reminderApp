@@ -48,8 +48,8 @@
             <b-dropdown-item-button>
               <label for="take-photo">
                 <input id="take-photo" ref="file3" type="file" @change="handleFileUpload($event)">
-                <p>Scan Document</p>
-                <img src="../static/images/scan.svg">
+                <p>Photo Library</p>
+                <img src="../static/images/images.svg">
               </label>
             </b-dropdown-item-button>
           </b-dropdown>
