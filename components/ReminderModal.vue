@@ -134,7 +134,7 @@
                   <div class="date-time-text">
                     <h6>Time</h6>
                     <p>
-                      Current
+                      {{ selectedTime }}
                     </p>
                     <!-- <p>14:00</p> -->
                     <!-- <client-only> <vue-datepicker class="timePicker" reference="menu" v-model="time_today" :config="{collapse:true}" /> </client-only> -->
@@ -165,6 +165,7 @@ export default {
       openpicker: false,
       date_today: new Date(),
       selectedDate: '',
+      selectedTime: '',
       time_today: new Date(),
       title: '',
       description: '',
@@ -189,18 +190,6 @@ export default {
       }
     }
   },
-  watch: {
-    title (value) {
-      this.title = value
-      if (value === '') {
-        this.enableSubmit = false
-        this.isError = true
-      } else {
-        this.enableSubmit = true
-        this.isError = false
-      }
-    }
-  },
   mounted () {
     this.selDel()
   },
@@ -208,6 +197,7 @@ export default {
     selDel () {
       const dt = new Date(this.date_today)
       this.selectedDate = dt.getDate() + '/' + dt.getMonth() + 1 + '/' + dt.getFullYear()
+      this.selectedTime = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
     },
     datePickerEvent (event) {
       this.date_today = event
