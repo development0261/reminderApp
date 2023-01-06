@@ -22,7 +22,7 @@
     <div class="reminder-slides" :class="{ 'change-slide': changeslide }">
       <div class="new-reminder-slide">
         <div class="new-reminder-titles">
-          <input v-model="title" type="text" placeholder="Title">
+          <input v-model="title" type="text" placeholder="Title" @blur="validateTitle($event)">
           <span v-if="isError" class="titleError">Please fill this field.</span>
           <textarea v-model="description" rows="4" placeholder="Notes" />
         </div>
@@ -32,22 +32,15 @@
         <div class="add-image-box">
           <b-dropdown text="Add Image">
             <b-dropdown-item-button>
-              <label for="take-photo">
-                <input id="take-photo" ref="file1" type="file" multiple @change="handleFileUpload($event)">
+              <label @click="toggleCamera">
+                <!-- for="take-photo" <input id="take-photo" type="file" accept="image/*;capture=camera"> -->
                 <p>Take Photo</p>
                 <img src="../static/images/camera.svg">
               </label>
             </b-dropdown-item-button>
             <b-dropdown-item-button>
-              <label for="take-photo">
-                <input id="take-photo" ref="file2" type="file" @change="handleFileUpload($event)">
-                <p>Scan Document</p>
-                <img src="../static/images/scan.svg">
-              </label>
-            </b-dropdown-item-button>
-            <b-dropdown-item-button>
-              <label for="take-photo">
-                <input id="take-photo" ref="file3" type="file" @change="handleFileUpload($event)">
+              <label for="photo-library">
+                <input id="photo-library" ref="file1" type="file" multiple @change="handleFileUpload($event)">
                 <p>Photo Library</p>
                 <img src="../static/images/images.svg">
               </label>
@@ -68,6 +61,34 @@
                 </button>
               </li>
             </ul>
+          </div>
+          <div v-show="isCameraOpen && isLoading" class="camera-loading">
+            <ul class="loader-circle">
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+          </div>
+          <div v-if="isCameraOpen" v-show="!isLoading" class="camera-box" :class="{ 'flash' : isShotPhoto }">
+            <div class="camera-shutter" :class="{'flash' : isShotPhoto}"></div>
+            <video v-show="!isPhotoTaken" ref="camera" :width="450" :height="337.5" autoplay></video>
+            <canvas v-show="isPhotoTaken" id="photoTaken" ref="canvas" :width="450" :height="337.5"></canvas>
+          </div>
+          <div v-if="isCameraOpen && !isLoading" class="camera-shoot">
+            <a id="javascript:void(0)" class="button" role="button" @click="toggleCamera">
+              Cancel
+            </a>
+            <button type="button" class="button" @click="takePhoto">
+              <img src="https://img.icons8.com/material-outlined/50/000000/camera--v2.png">
+            </button>
+          </div>
+          <div v-if="isPhotoTaken && isCameraOpen" class="camera-download">
+            <a id="retakePhoto" class="button" role="button" @click="takePhoto">
+              Retake
+            </a>
+            <a id="downloadPhoto" class="button" role="button" @click="downloadImage">
+              Use Photo
+            </a>
           </div>
         </div>
       </div>
@@ -155,6 +176,12 @@ export default {
       isError: false,
       slideDelete: false,
       fileIndex: '',
+      isCameraOpen: false, // camera options
+      isPhotoTaken: false,
+      isShotPhoto: false,
+      isLoading: false,
+      link: '#',
+      cameraImages: [],
       yourTimeValue: {
         HH: '10',
         mm: '05',
@@ -197,6 +224,16 @@ export default {
         this.filesdata.push(this.url)
       }
     },
+    validateTitle: function (e) {
+      const title = e.target.value
+      if (title === '') {
+        this.enableSubmit = false
+        this.isError = true
+      } else {
+        this.enableSubmit = true
+        this.isError = false
+      }
+    },
     async formSubmit () {
       const dateStr = this.date_today
       const data = new FormData()
@@ -208,6 +245,9 @@ export default {
         data.append('attachment[' + i + ']', this.$refs.file1.files[i])
       }
 
+      for (let d = 0; d < this.cameraImages.length; d++) {
+        data.append('cameraImages[' + d + ']', this.cameraImages[d])
+      }
       const config = {
         header: {
           'Access-Control-Allow-Origin': '*',
@@ -218,8 +258,20 @@ export default {
       }
       await this.$axios.post(process.env.NUXT_ENV_API_URL + '/reminders', data, config).then((response) => {
         if (response.data.status === 200) {
+          // empty form data
+          this.title = ''
+          this.description = ''
+          this.date_today = new Date()
+          this.due_time = new Date()
+          this.attachment = []
+          this.filesdata = []
+          // reset all errors
+          this.enableSubmit = false
+          this.isError = false
+          // reload reminders
           this.$emit('reminders')
           alert(response.data.msg)
+          // hide popup
           this.hideModal()
         } else {
           alert(response.data.msg)
@@ -230,10 +282,66 @@ export default {
     },
     deleteEvent (event) {
       this.filesdata.splice(event, 1)
+      this.cameraImages.splice(event, 1)
     },
     openDelete (index) {
       this.slideDelete = !this.slideDelete
       this.fileIndex = index
+    }, // camera open
+    toggleCamera () {
+      if (this.isCameraOpen) {
+        this.isCameraOpen = false
+        this.isPhotoTaken = false
+        this.isShotPhoto = false
+        this.stopCameraStream()
+      } else {
+        this.isCameraOpen = true
+        this.createCameraElement()
+      }
+    },
+    stopCameraStream () {
+      const tracks = this.$refs.camera.srcObject.getTracks()
+      tracks.forEach((track) => {
+        track.stop()
+      })
+    },
+    createCameraElement () {
+      this.isLoading = true
+      const constraints = (window.constraints = {
+        audio: false,
+        video: true
+      })
+      navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then((stream) => {
+          this.isLoading = false
+          this.$refs.camera.srcObject = stream
+        })
+        .catch((error) => {
+          this.isLoading = false
+          alert("May the browser didn't support or there is some errors.", error)
+        })
+    },
+    takePhoto () {
+      if (!this.isPhotoTaken) {
+        this.isShotPhoto = true
+        const FLASH_TIMEOUT = 50
+        setTimeout(() => {
+          this.isShotPhoto = false
+        }, FLASH_TIMEOUT)
+      }
+      this.isPhotoTaken = !this.isPhotoTaken
+      this.isLoading = false
+      const context = this.$refs.canvas.getContext('2d')
+      context.drawImage(this.$refs.camera, 0, 0, 450, 337.5)
+    },
+    downloadImage () {
+      document.getElementById('photoTaken').toDataURL('image/jpeg')
+        .replace('image/jpeg', 'image/octet-stream')
+      const img = document.getElementById('photoTaken').toDataURL('image/png')
+      this.filesdata.push(img)
+      this.cameraImages.push([img])
+      this.takePhoto()
     }
   }
 }
