@@ -21,10 +21,15 @@
     "bootstrap": "^4.6.2",
     "bootstrap-vue": "^2.22.0",
     "core-js": "^3.25.3",
+    "dotenv": "^16.0.3",
     "nuxt": "^2.15.8",
     "vue": "^2.7.10",
+    "vue-bootstrap-datetimepicker": "^5.0.1",
     "vue-server-renderer": "^2.7.10",
-    "vue-template-compiler": "^2.7.10"
+    "vue-template-compiler": "^2.7.10",
+    "vuejs-datepicker": "^1.6.2",
+    "vuex": "^4.0.2",
+    "vueye-datepicker": "^0.1.7"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
