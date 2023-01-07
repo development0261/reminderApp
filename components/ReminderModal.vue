@@ -98,10 +98,10 @@
             <li>
               <div class="date-time-btn-outer">
                 <label class="date-time-switch">
-                  <input type="checkbox">
+                  <input type="checkbox" @click="switchChecked($event, 'datepicker')">
                   <span class="date-time-switch-slider" />
                 </label>
-                <b-button v-b-toggle.collapse-1 class="date-time-btn">
+                <b-button id="clDatepicker" class="date-time-btn " :class="(isDateCollapse && switchCheckedBool) ? 'not-collapsed' : 'collapsed'" @click="collapsePicker('datepicker')">
                   <span class="date-time-icon date-icon">
                     <img src="../static/images/calendar.svg">
                   </span>
@@ -113,19 +113,19 @@
                   </div>
                 </b-button>
               </div>
-              <b-collapse id="collapse-1">
+              <div id="openDatepicker" :class="(isDateCollapse && switchCheckedBool) ? 'collapse show' : 'collapse'">
                 <div class="date-time-details">
                   <!-- <client-only> <vue-datepicker v-model="date_today" class="fileInput" :config="{collapse:true}" /> </client-only> -->
                 </div>
-              </b-collapse>
+              </div>
             </li>
             <li>
               <div class="date-time-btn-outer">
                 <label class="date-time-switch">
-                  <input type="checkbox">
+                  <input type="checkbox" @click="switchChecked($event, 'timepicker')">
                   <span class="date-time-switch-slider" />
                 </label>
-                <b-button v-b-toggle.collapse-2 class="date-time-btn">
+                <b-button id="clTimepicker" class="date-time-btn" :class="(isTimeCollapse && timeSwitchCheckedBool) ? 'not-collapsed' : 'collapsed'" @click="collapsePicker('timepicker')">
                   <span class="date-time-icon time-icon">
                     <img src="../static/images/time.svg">
                   </span>
@@ -136,11 +136,11 @@
                   </div>
                 </b-button>
               </div>
-              <b-collapse id="collapse-2">
+              <div id="openTimepicker" :class="(isTimeCollapse && timeSwitchCheckedBool) ? 'collapse show' : 'collapse'">
                 <div class="date-time-details1">
                   <h2>test</h2>
                 </div>
-              </b-collapse>
+              </div>
             </li>
           </ul>
         </div>
@@ -175,10 +175,36 @@ export default {
       isShotPhoto: false,
       isLoading: false,
       link: '#',
-      cameraImages: []
+      cameraImages: [],
+      isDateCollapse: false,
+      switchCheckedBool: false,
+      isTimeCollapse: false,
+      timeSwitchCheckedBool: false
     }
   },
   methods: {
+    collapsePicker (pickerID) {
+      if (pickerID === 'datepicker') {
+        this.isDateCollapse = !this.isDateCollapse
+      } else {
+        this.isTimeCollapse = !this.isTimeCollapse
+      }
+    },
+    switchChecked (event, picker) {
+      if (picker === 'datepicker') {
+        if (event.target.checked) {
+          this.switchCheckedBool = true
+        } else {
+          this.switchCheckedBool = false
+        }
+      } else if (picker === 'timepicker') {
+        if (event.target.checked) {
+          this.timeSwitchCheckedBool = true
+        } else {
+          this.timeSwitchCheckedBool = false
+        }
+      }
+    },
     hideModal () {
       this.$emit('close')
     },
