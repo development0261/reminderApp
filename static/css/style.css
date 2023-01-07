@@ -252,11 +252,36 @@ input:focus {
 
 .uploded-image-list {
     margin-top: 5px;
-    background: #2C2C2E;
+    /* background: #2C2C2E; */
     display: flex;
     flex-wrap: wrap;
     padding: 10px;
     border-radius: 10px;
+}
+
+.vdp-datepicker__calendar header .next:after {
+    border-left: 10px solid #007bff !important;
+    margin-left: 5px;
+}
+
+.vdp-datepicker__calendar header .prev:after {
+    border-right: 10px solid #007bff !important;
+}
+
+.vdp-datepicker__calendar .cell.day-header {
+    color: #67676d !important;
+}
+
+.vdp-datepicker__calendar {
+    color: #ffffff !important;
+    background: #2c2c2e !important;
+    border: none !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+}
+
+.vdp-datepicker__calendar header .prev:not(.disabled):hover, .vdp-datepicker__calendar header .next:not(.disabled):hover, .vdp-datepicker__calendar header .up:not(.disabled):hover {
+    background: none !important;
 }
 
 .uploded-image-list>div {
@@ -583,6 +608,11 @@ textarea:focus {
 .date-time-details {
     padding: 10px;
     height: 350px;
+}
+
+.date-time-details1 {
+    padding: 10px;
+    height: 250px;
 }
 
 .add-image-box .dropdown-toggle {

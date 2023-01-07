@@ -27,6 +27,7 @@
     "vue-bootstrap-datetimepicker": "^5.0.1",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
+    "vue-time-picker": "^0.2.6",
     "vuejs-datepicker": "^1.6.2",
     "vuex": "^4.0.2",
     "vueye-datepicker": "^0.1.7"

@@ -19,10 +19,10 @@
         <div class="list-view">
           <ul>
             <li v-for="(list, index) in data" :key="index" @click="openModal(list)">
-              <h6>{{ list.title }}</h6>
-              <p>{{ list.description }}</p>
-              <p class="due-date-time">{{ list.due_date }}, {{ list.due_time }}</p>
-              <div class="uploded-image-list">
+              <h6>{{ (list.title.length > 0) ? list.title : '' }}</h6>
+              <p>{{ (list.description != '' ) ? list.description : '' }}</p>
+              <p class="due-date-time">{{ (list.due_date != '' ) ? list.due_date : '' }}, {{ (list.due_time != '' ) ? list.due_time : '' }}</p>
+              <div class="uploded-image-list" v-if="JSON.parse(list.attachment).length > 0">
                 <div v-for="(file, fileIndex) in JSON.parse(list.attachment)" :key="fileIndex" class="uploded-image-box">
                   <img :src="url + '/' + file">
                 </div>
@@ -61,14 +61,6 @@ export default {
       url: process.env.NUXT_ENV_ATTACHMENT_URL
     }
   },
-  // async watch () {
-  //   console.log('Computed')
-  //   await this.getReminders()
-  // },
-  // async created () {
-  //   console.log('Mounted')
-  //   await this.getReminders()
-  // },
   methods: {
     hideModal () {
       this.$emit('close')
@@ -78,9 +70,6 @@ export default {
       this.modalVisible = true
       this.changeslide = !this.changeslide
     }
-    // async getReminders () {
-    //   await this.$axios.get(process.env.NUXT_ENV_API_URL + '/reminders').then((response) => { this.results = response.data.data })
-    // }
   }
 }
 </script>
