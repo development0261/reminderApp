@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
-
 body {
     background-color: #000000;
     color: #ffffff;
@@ -210,8 +209,6 @@ input:focus {
     bottom: 0;
 }
 
-
-
 .reminder-header {
     min-height: 21px;
     position: relative;
@@ -386,7 +383,6 @@ textarea:focus {
     padding: 10px 15px 10px 20px;
     color: #fff;
 }
-
 
 .new-reminder-slide {
     flex: 0 0 100%;
@@ -637,7 +633,6 @@ textarea:focus {
     color: #fff;
 }
 
-
 .add-image-box .dropdown-menu .dropdown-item {
     padding: 0;
 }
@@ -669,8 +664,6 @@ textarea:focus {
     background-color: transparent;
     box-shadow: none;
 }
-
-
 
 .upload-image-box {
     display: flex;
@@ -788,6 +781,54 @@ textarea:focus {
 }
 
 .titleError {
-    color : red;
+    color: red;
     font-size: 13px;
+}
+
+
+/* Take a Photo */
+
+.camera-download {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.camera-shoot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    justify-content: center;
+}
+
+.camera-shoot>a {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    transform: translateY(-50%);
+    color: #3B82F6;
+    left: 20px;
+}
+
+.camera-download a {
+    color: #3B82F6;
+}
+
+.camera-shoot button {
+    background: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.camera-shoot button img {
+    width: 25px;
+    position: relative;
+    top: 1px;
 }
