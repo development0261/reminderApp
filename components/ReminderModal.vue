@@ -223,7 +223,7 @@ export default {
     selDel () {
       const dt = new Date(this.date_today)
       this.selectedDate = dt.getDate() + '/' + dt.getMonth() + 1 + '/' + dt.getFullYear()
-      this.selectedTime = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
+      this.selectedTime = this.due_time = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
     },
     datePickerEvent (event) {
       this.date_today = event
